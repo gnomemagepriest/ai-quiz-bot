@@ -1,0 +1,21 @@
+venv/
+.env
+*.pyc
+__pycache__/
+ssl/     # Сертификаты
+.DS_Store
+instance/
+migrations/
+*.log
+logs
+**/*.backup.*
+**/*.back.*
+
+node_modules
+bower_components
+
+*.sublime*
+
+psd
+thumb
+sketch
