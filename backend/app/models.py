@@ -1,5 +1,23 @@
 from .extensions import db
+import hashlib
+import os
 from datetime import datetime
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(150), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+
+    def set_password(self, password):
+        salt = os.urandom(16)
+        pwdhash = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
+        self.password_hash = salt + pwdhash
+
+    def check_password(self, password):
+        salt = self.password_hash[:16]
+        stored_password = self.password_hash[16:]
+        pwdhash = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
+        return pwdhash == stored_password
 
 class Quiz(db.Model):
     id = db.Column(db.Integer, primary_key=True)

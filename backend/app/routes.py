@@ -1,6 +1,18 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, make_response
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from .models import Quiz, UserQuizAttempt, UserAnswer, User, db
+from .auth import create_token, get_user
 from .models import Quiz, UserQuizAttempt, UserAnswer, db
 bp = Blueprint('api', __name__, url_prefix='/api')
+
+@bp.route('/login', methods=['POST'])
+def login():
+    return create_token()
+
+@bp.route('/user', methods=['GET'])
+@jwt_required()
+def user():
+    return get_user()
 
 @bp.route('/')
 def index():
